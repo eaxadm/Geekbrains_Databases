@@ -1,0 +1,14 @@
+USE vk;
+SELECT * FROM communities;
+INSERT IGNORE INTO communities (name) VALUES ('fuga');
+SHOW WARNINGS;
+INSERT INTO communities SET name = 'communityzzz';
+SELECT DISTINCT * FROM communities;
+SELECT ALL * FROM communities LIMIT 10;
+UPDATE communities SET id = id * 10;
+UPDATE communities SET name = 'group' WHERE name = 'communityzzz';
+DELETE FROM communities WHERE name = 'group';
+DELETE FROM communities;
+INSERT INTO communities VALUES (DEFAULT, 'fuga');
+TRUNCATE communities;
+INSERT INTO communities VALUES (DEFAULT, 'fuga');
