@@ -2,10 +2,14 @@
 
 USE vk; 
 
+SET FOREIGN_KEY_CHECKS=0;
+
 ALTER TABLE profiles
   ADD CONSTRAINT profiles_user_id_fk 
      FOREIGN KEY (user_id) REFERENCES users(id)
-      ON DELETE CASCADE,
+      ON DELETE CASCADE; 
+
+ALTER TABLE profiles
   ADD CONSTRAINT profiles_photo_id_fk
      FOREIGN KEY (photo_id) REFERENCES media(id)
       ON DELETE SET NULL;
@@ -64,3 +68,4 @@ ALTER TABLE communities_users
     FOREIGN KEY (community_id) REFERENCES communities(id)
      ON DELETE CASCADE;
 
+SET FOREIGN_KEY_CHECKS=1;
