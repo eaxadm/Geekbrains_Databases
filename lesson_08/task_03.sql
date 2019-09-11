@@ -56,13 +56,13 @@ SELECT SUM(temp2.likes_count) AS 10_youngest_users_likes_sum
              ON 
                l.like_type_id = lt.id WHERE lt.name = 'users' AND l.item_id = p.user_id
            JOIN media AS m
-             OR
+             ON
                l.like_type_id = lt.id WHERE lt.name = 'media' AND m.user_id = p.user_id
            JOIN posts AS ps
-             OR
+             ON
                l.like_type_id = lt.id WHERE lt.name = 'posts' AND ps.user_id = p.user_id
            JOIN newsline AS n
-             OR
+             ON
                l.like_type_id = lt.id WHERE lt.name = 'newsline' AND n.user_id = p.user_id
              ) AS temp
       GROUP BY temp.user
