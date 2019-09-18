@@ -1,0 +1,32 @@
+/* Задание на денормализацию
+Разобраться как построен и работает следующий запрос. Правильно-ли он построен?
+Какие изменения, включая денормализацию, можно внести в структуру БД
+чтобы существенно повысить скорость работы этого запроса? */
+
+SELECT SUM(count) as overall FROM (
+SELECT
+CONCAT(u.firstname, ' ', u.lastname) as user,
+count(l.id) as count,
+TIMESTAMPDIFF(YEAR, p.birthday, NOW()) AS age
+FROM users AS u
+INNER JOIN profiles AS p
+ON p.user_id = u.id
+LEFT JOIN media as m
+ON m.user_id = u.id
+LEFT JOIN messages as t
+ON t.from_user_id = u.id
+LEFT JOIN
+likes AS l
+ON l.item_id = u.id AND l.like_type_id = 2
+OR l.item_id = m.id AND l.like_type_id = 1
+OR l.item_id = t.id AND l.like_type_id = 3
+GROUP BY u.id
+ORDER BY p.birthday DESC
+LIMIT 10) AS likes;
+
+	Вообще, на моей базе аналогичный запрос без DISTINCT (count(DISTINCT l.id) as count) считает количество лайков неверно (без подсчета только уникальных записей получается сильно завышенное количество лайков - 93 против 24). Но думаю, тут все дело в тестовых данных.
+Для улучшения читаемости и "понятности" условия вида l.like_type_id = 2 можно заменить на запросы к таблице like_types по полю name (типа l.like_type_id =  
+запрос к like_types где name = 'users')
+	Что касается изменения структуры, в принципе все проговорили в видео - можно создать индексы на поля p.user_id, m.user_id, t.from_user_id, l.item_id для ускорения поиска при сравнениях типа p.user_id = u.id. Еще вариант - объединить таблицы likes и like_types, добавив в первую доп столбец с типом лайков в виде строки или типом enum/json. Аналогично можно было бы перенести столбцы firstname, lastname и birthday в таблицу users. Так мы избавимся от "лишних" обращений в доп таблицам.
+Еще есть вариант (и кто-то по-моему прелагал подобное на одном из первых занятий) - создать отдельную таблицу с колвом лайков для каждого item_id, а колво их менять триггерами на этапе добавления/удаления лайка. 
+
