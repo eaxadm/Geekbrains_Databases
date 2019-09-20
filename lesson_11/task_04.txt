@@ -1,0 +1,25 @@
+/* При помощи базы данных Redis решите задачу поиска имени пользователя по электронному адресу и наоборот, поиск электронного адреса пользователя по его имени. */
+
+Не нашел способа средствами redis получить ключ по значению. Поэтому вижу лишь вариант с "дублированием" данных - т.е. на каждую учетку создавать две пары "ключ-значение" : name-email и email-name: 
+MSET obama@mail.ru obama obama obama@mail.ru deniska deniska@mail.ru deniska@mail.ru deniska
+KEYS *
+GET obama
+GET deniska@mail.ru
+
+Либо в коллекции:
+HMSET users obama@mail.ru obama obama obama@mail.ru deniska deniska@mail.ru deniska@mail.ru deniska
+KEYS *
+HGET users obama
+HGET deniska@mail.ru
+
+При этом, конечно, и name и email должны быть уникальны:
+EXISTS obama
+HEXISTS obama
+
+При условии неуникальности можно использовать множества. Так мы получим коллекции вида "name-множество email" и "email-множество name"
+SADD katya@mail.ru katya
+SADD katya katya@mail.ru
+SADD katya katya@yandex.ru
+SMEMBERS katya
+
+
