@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS `catalogs`;
 
 CREATE TABLE `catalogs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `parent_id` BIGINT(20) unsigned NOT NULL DEFAULT 0,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Название раздела',
   PRIMARY KEY (`id`),
   INDEX (name)
@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `discounts`;
 CREATE TABLE `discounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) unsigned NOT NULL,
-  `discount` float(11,1) unsigned DEFAULT NULL COMMENT 'Величина скидки от 0.1 до 1.0',
+  `discount` decimal(11,1) unsigned DEFAULT NULL COMMENT 'Величина скидки от 0.1 до 1.0',
   `started_at` datetime DEFAULT NULL,
   `finished_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
