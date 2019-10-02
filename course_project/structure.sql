@@ -9,7 +9,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs( 
 	id SERIAL PRIMARY KEY,
-	parent_id SMALLINT UNSIGNED NOT NULL DEFAULT 0, -- id родителя предыдущего уровня
+	parent_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0, -- id родителя предыдущего уровня
  	name VARCHAR(100) NOT NULL COMMENT 'Название раздела',
 	INDEX (name)	
 ) COMMENT 'Разделы интернет-магазина';
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS discounts;
 CREATE TABLE discounts (
 	id SERIAL PRIMARY KEY,
 	product_id BIGINT(20) UNSIGNED NOT NULL,
-	discount FLOAT (11,1) UNSIGNED COMMENT 'Величина скидки от 0.0 до 1.0',
+	discount DECIMAL(11,1) UNSIGNED COMMENT 'Величина скидки от 0.0 до 1.0',
 	started_at DATETIME,  -- дата начала действия
 	finished_at DATETIME, -- срок действия скидки
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
